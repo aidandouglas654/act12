@@ -24,6 +24,21 @@ class SignupPage extends StatefulWidget {
   State<SignupPage> createState() => _SignupPageState(); // Stateful to track form inputs
 }
 
+class WelcomePage extends StatelessWidget {
+  final String name;
+  const WelcomePage({super.key, required this.name});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Welcome')),
+      body: Center(
+        child: Text('Welcome, $name', style: TextStyle(fontSize: 24)),
+      ),
+    );
+  }
+}
+
 class _SignupPageState extends State<SignupPage> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _nameController =
@@ -140,10 +155,10 @@ class _SignupPageState extends State<SignupPage> {
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Welcome! Account created successfully.'),
-                        backgroundColor: Colors.green,
+                    final enteredName = _nameController.text.trim();
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (_) => WelcomePage(name: enteredName),
                       ),
                     );
                   }
