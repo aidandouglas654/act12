@@ -21,14 +21,17 @@ class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
 
   @override
-  State<SignupPage> createState() => _SignupPageState();
+  State<SignupPage> createState() => _SignupPageState(); // Stateful to track form inputs
 }
 
 class _SignupPageState extends State<SignupPage> {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _nameController =
+      TextEditingController(); // Tracks each field
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmpasswordController =
+      TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -59,6 +62,7 @@ class _SignupPageState extends State<SignupPage> {
                   border: OutlineInputBorder(),
                 ),
                 validator: (value) {
+                  // Checks if we have value
                   if (value == null || value.isEmpty) {
                     return 'Please enter your name';
                   }
@@ -69,6 +73,7 @@ class _SignupPageState extends State<SignupPage> {
 
               // Email Field
               TextFormField(
+                //
                 controller: _emailController,
                 decoration: const InputDecoration(
                   labelText: 'Email Address',
@@ -108,7 +113,30 @@ class _SignupPageState extends State<SignupPage> {
               ),
               const SizedBox(height: 24),
 
-              // Sign Up Button
+              TextFormField(
+                controller: _confirmpasswordController,
+                obscureText: true,
+                decoration: const InputDecoration(
+                  labelText: 'Confirm Password',
+                  prefixIcon: Icon(Icons.lock),
+                  border: OutlineInputBorder(),
+                ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter a password';
+                  }
+                  if (value.length < 6) {
+                    return 'Password must be at least 6 characters';
+                  }
+                  if (value != _passwordController.text) {
+                    return 'Passwords do not match';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 24),
+
+              // Sign Up Button, calls validation on press, checks if all fields are accurate
               ElevatedButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
